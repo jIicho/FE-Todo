@@ -2,7 +2,7 @@ import { store } from "../store/store.js";
 import { createRecordForm, createShowCardForm } from "./createForm.js";
 
 export function init() {
-  store.fetchData(function () {
+  store.fetchData().then(() => {
     cardView(store.state.columns);
     historyView(store.state.historyList);
   });
