@@ -14,6 +14,14 @@ export const store = {
       .catch((error) => console.error("오류 발생:", error));
   },
 
+  getColumn() {
+    return this.state.columns;
+  },
+
+  getHistoryList() {
+    return this.state.historyList;
+  },
+
   addCard(columnId, title, content, author = "author by web") {
     const newCard = { title, content, author };
     this.state.columns.forEach((objCol) => {
@@ -26,6 +34,18 @@ export const store = {
   },
 
   addHistory(action, title, fromColumn, toColumn = null) {
+    const [year, month, day, time] = new Date()
+      .toLocaleString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      })
+      .split(". "); // ["2025", "03", "21", "14:22:20"]형식
+
     const historyRecord = {
       photo: "./images/sam.png",
       userName: "@멋진삼",
@@ -33,7 +53,7 @@ export const store = {
       title: `${title}`,
       fromColumn: `${fromColumn}`,
       toColumn: `${toColumn}`,
-      timeStamp: new Date(),
+      timeStamp: `${year}-${month}-${day} ${time}`,
     };
     this.state.historyList.unshift(historyRecord);
   },

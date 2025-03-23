@@ -25,7 +25,7 @@ export function createRecordForm(record) {
     record.fromColumn,
     record.toColumn
   );
-  const time = calculateTime(record.timeStamp);
+
   const recordElement = document.createElement("div");
   recordElement.classList.add("record");
   recordElement.innerHTML = `<img src="${record.photo}" class="userImage" />
@@ -34,14 +34,24 @@ export function createRecordForm(record) {
       <div class="textBody">
         ${textBody}
       </div>
-      <div class="timeStamp">${time}</div>
+      <div class="timeStamp">${record.timeStamp}</div>
     </div>
   </div>`;
   return recordElement;
 }
 
-function calculateTime(date) {
-  const inputTime = new Date(date).getTime();
+export function updateTime(historyList) {
+  const timeStampElements = document.querySelectorAll(".timeStamp");
+  // timeStamp가 아니라 history를 불러와서 처리 후 해당되는 timeStamp에 값 넣기
+  //
+  historyList.forEach((record, index) => {
+    const timeStamp = record.timeStamp;
+    Array.from(timeStampElements)[index].textContent = calculateTime(timeStamp);
+  });
+}
+
+function calculateTime(timeStamp) {
+  const inputTime = new Date(timeStamp).getTime();
   const now = new Date().getTime();
   const diffInSeconds = Math.floor((now - inputTime) / 1000); // 초 단위 차이 계산
   const diffInMinutes = Math.floor(diffInSeconds / 60); // 분 단위 차이
@@ -49,7 +59,7 @@ function calculateTime(date) {
   const diffInDays = Math.floor(diffInHours / 24); // 일 단위 차이
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds}초 전`;
+    return `방금 전`;
   } else if (diffInMinutes < 60) {
     return `${diffInMinutes}분 전`;
   } else if (diffInHours < 24) {
@@ -57,7 +67,7 @@ function calculateTime(date) {
   } else if (diffInDays < 30) {
     return `${diffInDays}일 전`;
   } else {
-    return date;
+    return timeStamp;
   }
 }
 

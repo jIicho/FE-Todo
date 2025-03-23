@@ -1,10 +1,23 @@
 import { store } from "../store/store.js";
-import { createRecordForm, createShowCardForm } from "./createForm.js";
+import {
+  createRecordForm,
+  createShowCardForm,
+  updateTime,
+} from "./createForm.js";
 
 export function init() {
   store.fetchData().then(() => {
-    cardView(store.state.columns);
-    historyView(store.state.historyList);
+    const column = store.getColumn();
+    const historyList = store.getHistoryList();
+    cardView(column);
+    historyView(historyList);
+    startUpdateTime(historyList);
+  });
+}
+
+function startUpdateTime(historyList) {
+  setInterval(() => {
+    updateTime(historyList), 1000;
   });
 }
 
